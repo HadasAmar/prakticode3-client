@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import service from "../service";
+import { useNavigate } from "react-router-dom";
 
 function Tasks() {
   const [newTodo, setNewTodo] = useState("");
   const [todos, setTodos] = useState([]);
   const [customerName, setCustomerName] = useState("");
+  const navigate = useNavigate();
 
   async function getTodos() {
     const todos = await service.getTasks();
     setTodos(todos);
+    const loggedInUser = service.getLoginUser();
+    setCustomerName(loggedInUser ? loggedInUser.name : "");
   }
 
   async function createTodo(e) {
@@ -29,11 +33,10 @@ function Tasks() {
   }
 
   useEffect(() => {
-    const loggedInUser = service.getLoginUser();
-    setCustomerName(loggedInUser ? loggedInUser.name : "");
+    
     getTodos();
-  }, []);
-
+    }, []);
+  
   async function logout() {
     await service.logout();
     window.location.reload();

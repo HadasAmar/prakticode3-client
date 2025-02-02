@@ -15,7 +15,7 @@ function Login() {
       console.log("Login response:", response);
     } catch (error) {
       console.error("Error during login:", error);
-      alert("Login failed. Please check your credentials.");
+      alert("אחד הפרטים שגויים");
     }
   };
 

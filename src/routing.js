@@ -9,10 +9,10 @@ export const Routing = () => {
 
             <Route path="toLogin" element={<Login></Login>} />
 
-            {/* דף אודות */}
+            <Route path="/" element={<Login></Login>} />
+
             <Route path="toRegister" element={<Register></Register>} />
 
-            {/* דף יצירת קשר */}
             <Route path="toTasks" element={<Tasks></Tasks>} /> 
                </Routes>
     </>
