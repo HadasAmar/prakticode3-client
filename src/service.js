@@ -27,18 +27,37 @@ function setAuthorizationBearer(token) {
   }
 }
 
+//פתרון לבנתיים, צריך לראות למה השגיאות לא נפתסות בצורה מיטבית
 apiClient.interceptors.response.use(
   response => response,
   error => {
-    console.log("Error response intercepted:", error.response);
-    if (error.response && error.response.status === 401) {
-      alert("שגיאה בנסיון ההצגה, אנא התחבר מחדש");
+    if (error.response) {
+      if (error.response.status === 401) {
+        localStorage.removeItem("access_token");
+
+        document.body.style.display = 'none'; 
+        // המתנה של שנייה לפני המעבר לדף הכניסה
+        setTimeout(() => {
+          window.location.href = "/toLogin";
+        }, 500); 
+
+      }
+      console.log("Error response intercepted:", error.response);
+    } else {
+      console.error("Network error, no response received");
       localStorage.removeItem("access_token");
-      window.location.href = "/toLogin"; // מעביר לדף ההתחברות
+
+      document.body.style.display = 'none'; // מחבא את הדף
+
+      setTimeout(() => {
+        window.location.href = "/toLogin";
+      }, 500); // המתנה לפני המעבר
     }
     return Promise.reject(error);
   }
 );
+
+
 
 
 
