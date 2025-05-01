@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React,{ useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import service from "../service";
 
@@ -6,14 +6,13 @@ function Register() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [mail, setMail] = useState("");
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await service.register(userName, password, mail);
-      navigate("/toTasks")
-      console.log("register response:", response);
+      await service.register(userName, password, mail);
+      navigate("/toTasks");
     } catch (error) {
       console.error("Error during register:", error);
       alert("Registration failed. Please check your credentials.");
@@ -21,8 +20,8 @@ function Register() {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{padding:"4rem" ,backgroundColor: "rgb(77, 136, 135)" }}>
-      <div className="card shadow-lg" style={{ width: "100%", maxWidth: "520px", padding: "3rem", borderRadius: "8px" }}>
+    <div className="page-content d-flex justify-content-center align-items-center" style={{padding:"4rem" ,backgroundColor: "rgb(77, 136, 135)" }}>
+      <div className="card shadow-lg" style={{ marginTop:"90px", width: "100%", maxWidth: "520px", padding: "3rem", borderRadius: "8px" }}>
         <h1 className="text-center mb-4" style={{ color: "rgb(24, 79, 75)" }}>Register</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">

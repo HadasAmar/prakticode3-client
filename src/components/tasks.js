@@ -5,21 +5,30 @@ import { useNavigate } from "react-router-dom";
 function Tasks() {
   const [newTodo, setNewTodo] = useState("");
   const [todos, setTodos] = useState([]);
-  const [customerName, setCustomerName] = useState("");
   const navigate = useNavigate();
 
   async function getTodos() {
-    const todos = await service.getTasks();
-    setTodos(todos);
-    const loggedInUser = service.getLoginUser();
-    setCustomerName(loggedInUser ? loggedInUser.name : "");
+
+    try {
+      const todos = await service.getTasks();
+      setTodos(todos);
+    } catch (e) {
+      alert(e.message);
+      navigate("/toLogin");
+    }
+
   }
 
   async function createTodo(e) {
     e.preventDefault();
+    try {
     await service.addTask(newTodo);
-    setNewTodo(""); // clear input
-    await getTodos(); // refresh tasks list (in order to see the new one)
+    setNewTodo("");
+    await getTodos();
+    } catch (e) {
+      alert(e.message);
+      navigate("/toLogin");
+    }    
   }
 
   async function updateCompleted(todo, isComplete) {
@@ -29,22 +38,16 @@ function Tasks() {
 
   async function deleteTodo(id) {
     await service.deleteTask(id);
-    await getTodos(); // refresh tasks list
+    await getTodos();
   }
 
   useEffect(() => {
-    
     getTodos();
-    }, []);
-  
-  async function logout() {
-    await service.logout();
-    window.location.reload();
-  }
+  }, []);
 
   return (
     <div
-      className="d-flex justify-content-center align-items-center"
+      className="page-content d-flex justify-content-center align-items-center"
       style={{
         minHeight: "100vh",
         backgroundColor: "rgb(77, 136, 135)",
@@ -63,7 +66,7 @@ function Tasks() {
       >
         <header className="text-center mb-4">
           <h1 style={{ color: "rgb(24, 79, 75)" }}>My Todo List</h1>
-          {customerName && <p className="lead" style={{ color: "rgb(48, 92, 85)" }}>Welcome, {customerName}!</p>}
+          {/* {customerName && <p className="lead" style={{ color: "rgb(48, 92, 85)" }}>Welcome, {customerName}!</p>} */}
         </header>
         <form onSubmit={createTodo} className="mb-4">
           <div className="input-group">
@@ -102,9 +105,8 @@ function Tasks() {
             >
               <div className="d-flex align-items-center">
                 <button
-                  className={`btn btn-sm ${
-                    todo.isComplete ? "btn-success" : "btn-outline-danger"
-                  } rounded-circle me-3`}
+                  className={`btn btn-sm ${todo.isComplete ? "btn-success" : "btn-outline-danger"
+                    } rounded-circle me-3`}
                   style={{ width: "30px", height: "30px" }}
                   onClick={() => updateCompleted(todo, !todo.isComplete)}
                 >
@@ -132,20 +134,6 @@ function Tasks() {
             </li>
           ))}
         </ul>
-        <button
-          onClick={logout}
-          className="btn w-100 mt-4"
-          style={{
-            backgroundColor: "rgb(48, 92, 85)",
-            color: "white",
-            border: "none",
-            fontSize: "16px",
-          }}
-          onMouseOver={(e) => (e.target.style.backgroundColor = "rgb(60, 110, 102)")}
-          onMouseOut={(e) => (e.target.style.backgroundColor = "rgb(48, 92, 85)")}
-        >
-          Logout
-        </button>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import service from "../service";
 
 function Login() {
@@ -10,18 +10,18 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await service.login(userName, password);
-      navigate("/toTasks")
-      console.log("Login response:", response);
+      await service.login(userName, password);
+      navigate("/toTasks");
     } catch (error) {
       console.error("Error during login:", error);
       alert("אחד הפרטים שגויים");
     }
   };
 
+
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{padding:"4rem" ,    backgroundColor:" rgb(77, 136, 135)"}}>
-      <div className="card shadow-lg" style={{ width: "100%", maxWidth: "520px", padding: "3rem", borderRadius: "8px" }}>
+    <div className="page-content d-flex justify-content-center align-items-center" style={{padding:"4rem" ,    backgroundColor:" rgb(77, 136, 135)"}}>
+      <div className="card shadow-lg" style={{ width: "100%", maxWidth: "520px", padding: "3rem", borderRadius: "8px", marginTop: "90px" }}>
         <h1 className="text-center mb-4" style={{color:" rgb(24, 79, 75)"}}>Login</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
